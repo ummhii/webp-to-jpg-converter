@@ -18,6 +18,14 @@ def convert_image(root, filename):
 
 
 def convert_webpg_to_jpg(directory, recursive=False):
+    if not os.path.isdir(directory):
+        print(f'Invalid directory: {directory}')
+        return
+
+    if not os.access(directory, os.W_OK):
+        print(f'Directory not writable: {directory}')
+        return
+
     if recursive:
         for root, dirs, files in os.walk(directory):
             for filename in files:
@@ -29,10 +37,8 @@ def convert_webpg_to_jpg(directory, recursive=False):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert .webp images to .jpg format.')
-    parser.add_argument('directory', nargs='?', default=os.getcwd(),
-                        help='Directory to search for .webp files.')
-    parser.add_argument('-r', '--recursive', action='store_true',
-                        help='Recursively convert .webp files in all subdirectories.')
+    parser.add_argument('directory', nargs='?', default=os.getcwd(), help='Directory to search for .webp files.')
+    parser.add_argument('-r', '--recursive', action='store_true', help='Recursively convert .webp files in all subdirectories.')
 
     args = parser.parse_args()
     convert_webpg_to_jpg(args.directory, args.recursive)
